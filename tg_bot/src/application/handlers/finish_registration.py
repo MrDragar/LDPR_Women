@@ -1,6 +1,7 @@
 from aiogram import types
 from aiogram.fsm.context import FSMContext
 
+from src.application.keyboards.menu_keyboard import get_menu_keyboard
 from src.application.keyboards.miniapp_keyboard import get_miniapp_keyboard
 from src.services.interfaces import IUserService
 
@@ -42,6 +43,7 @@ async def finish_registration(user_service: IUserService, state: FSMContext, mes
         'Используйте кнопку ниже, чтобы открыть наш сайт',
         reply_markup=get_miniapp_keyboard()
     )
+    await message.answer("Меню", reply_markup=get_menu_keyboard())
     await message.bot.send_message(chat_id=log_chat, text=f"""
 Новый пользователь {'@' + user.username if user.username else '<нет username>'} зарегистрировался.
 Источник: ТГ

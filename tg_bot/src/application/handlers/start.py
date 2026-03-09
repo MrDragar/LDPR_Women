@@ -1,8 +1,9 @@
 import logging
 
-from aiogram import Router, types, filters
+from aiogram import Router, types, filters, F
 from aiogram.fsm.context import FSMContext
 
+from src.application.keyboards.menu_keyboard import get_menu_keyboard
 from src.application.keyboards.personal_data_keyboard import \
     get_personal_data_keyboard
 from src.application.states import RegistrationStates
@@ -17,6 +18,7 @@ logger = logging.getLogger(__name__)
 
 @router.message()
 @start_command_router.message(filters.CommandStart())
+@start_command_router.message(F.text == 'Отмена')
 async def start(message: types.Message, user_service: IUserService,
                 state: FSMContext):
     if message.chat.id <= 0:
@@ -30,6 +32,7 @@ async def start(message: types.Message, user_service: IUserService,
             'Используйте кнопку ниже, чтобы открыть наш сайт',
             reply_markup=get_miniapp_keyboard()
         )
+        await message.answer("Меню", reply_markup=get_menu_keyboard())
         return
 
     logging.debug(f"User {message.from_user.id} Start conversation")

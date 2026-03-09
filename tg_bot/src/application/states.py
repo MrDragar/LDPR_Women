@@ -22,3 +22,9 @@ class RegistrationStates(StatesGroup):
 class PostsStates(StatesGroup):
     get_message = State()
     confirm = State()
+
+
+class UploadVideoStates(StatesGroup):
+    location = State()
+    video = State()
+    uploading = State()
