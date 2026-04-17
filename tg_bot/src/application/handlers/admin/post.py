@@ -49,6 +49,8 @@ async def confirm_post_handler(
     bad_id = []
     count = 0
     for user in users:
+        if user.region not in ["Тамбовская область", 'Рязанская область', 'Владимирская область']:
+            continue
         await asyncio.sleep(0.2)
         logger.info(f"Checking {user.id}")
         try:
