@@ -1,5 +1,6 @@
 import logging
 from aiogram import Bot as TgBot
+from aiogram.client.session.aiohttp import AiohttpSession
 from vkbottle import Bot, DocMessagesUploader, PhotoMessageUploader
 from src.application.handlers import full_labeler as root_labeler
 from src.application.middlewares import DIProvideMiddleware
@@ -19,7 +20,10 @@ def main():
     container = Container()
 
     bot = Bot(token=config.VK_API_TOKEN)
-    tg_bot = TgBot(token=config.TG_API_TOKEN)
+    tg_bot = TgBot(
+        token=config.TG_API_TOKEN,
+        session=AiohttpSession(proxy=config.proxy)
+    )
     bot.api.admin_ids = config.admin_ids
     bot.api.log_chat = config.log_chat
 

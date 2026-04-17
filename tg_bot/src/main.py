@@ -2,6 +2,7 @@ import asyncio
 import logging
 
 from aiogram import Bot, Dispatcher
+from aiogram.client.session.aiohttp import AiohttpSession
 
 from src.application.handlers import router as root_router
 from src.application.middlewares import DIProvideMiddleware
@@ -16,7 +17,10 @@ async def main():
         filename=config.log_file,
         filemode="a"
     )
-    bot = Bot(token=config.TG_API_TOKEN)
+    bot = Bot(
+        token=config.TG_API_TOKEN,
+        session=AiohttpSession(proxy=config.proxy)
+    )
     container = Container()
     logging.debug(f"{vars(container)}, {container.user_service}")
     logging.debug("")

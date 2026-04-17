@@ -6,6 +6,7 @@ from dotenv import load_dotenv
 load_dotenv()
 VK_API_TOKEN = os.getenv("VK_API_TOKEN")
 TG_API_TOKEN = os.getenv("TG_API_TOKEN")
+proxy = os.getenv("PROXY", None)
 
 log_chat = os.getenv("LOG_CHAT")
 log_level = os.getenv("LOG_LEVEL", "INFO")
