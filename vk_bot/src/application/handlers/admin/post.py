@@ -37,9 +37,12 @@ async def confirm_post(message: Message, state_dispenser: BuiltinStateDispenser)
 
     # Формируем красивое превью
     preview = message.text
-    if message.attachments:
-        preview += f"\n[Вложений: {len(message.attachments)}]"
-
+    # if message.attachments:
+    #     preview += f"\n[Вложений: {len(message.attachments)}]"
+    await message.answer(
+        preview,
+        attachment=msg_data['attachments'][0] if msg_data['attachments'] else None
+    )
     await message.answer(
         f"Вы уверены, что хотите разослать это сообщение?\n\n{preview}\n\nОтправьте 'Да' для подтверждения."
     )
@@ -62,10 +65,10 @@ async def start_mailing(message: Message, user_service: IUserService,
 
     count = 0
     # Оптимизация: формируем строку attachments один раз, если она есть
-    attachment_string = ""
+    attachment = None
     if attachments:
-        # Преобразуем список объектов Attachment в строку формата "photo123_456,video789_012"
-        attachment_string = ",".join([att.resolve_for_forward() for att in attachments])
+        attachment = attachments[0]
+
 
     for u in users:
         try:
@@ -73,7 +76,7 @@ async def start_mailing(message: Message, user_service: IUserService,
             await message.ctx_api.messages.send(
                 peer_id=u.id,
                 message=text,
-                attachment=attachment_string if attachment_string else None,
+                attachment=attachment,
                 random_id=0
             )
             count += 1
