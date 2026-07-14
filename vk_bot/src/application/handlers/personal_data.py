@@ -26,12 +26,11 @@ async def handle_pd_agree(event: GroupTypes.MessageEvent,
 
     # Переводим в следующий стейт
     await state_dispenser.set(event.object.peer_id,
-                              RegistrationStates.MEMBERSHIP)
+                              RegistrationStates.SURNAME)
 
     await event.ctx_api.messages.send(
         peer_id=event.object.peer_id,
-        message='Вы являетесь членом ЛДПР?',
-        keyboard=get_boolean_keyboard(),
+        message='Введите вашу фамилию:',
         random_id=0
     )
 

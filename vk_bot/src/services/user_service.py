@@ -28,18 +28,16 @@ class UserService(IUserService):
 
     async def create_user(
             self, user_id: int, username: str | None,
-            surname: str, name: str, is_member: bool,
+            surname: str, name: str,
             patronymic: str | None, birth_date: date,
             phone_number: str, region: str, email: str,
-            gender: str, city: str, wish_to_join: bool, home_address: str | None,
-            news_subscription: bool
+            gender: str
     ) -> User:
         user = User(
             id=user_id, source=self.__source, username=username, phone_number=phone_number,
             surname=surname, name=name, patronymic=patronymic,
             birth_date=birth_date, region=region, email=email,
-            gender=gender, city=city, wish_to_join=wish_to_join,
-            home_address=home_address, is_member=is_member, news_subscription=news_subscription
+            gender=gender,
         )
         async with self.__uow.atomic():
             await self.__user_repo.create_user(user)

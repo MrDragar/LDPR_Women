@@ -1,9 +1,10 @@
 from vkbottle.bot import BotLabeler, Message
-from vkbottle import GroupEventType, GroupTypes
-from vkbottle.dispatch.rules.base import PayloadRule, PayloadContainsRule
+from vkbottle import GroupEventType, GroupTypes, PhotoMessageUploader
 from vkbottle.dispatch import BuiltinStateDispenser
+from aiogram import Bot as TgBot
 
 from src.application.filters import CMDRule
+from src.application.handlers.finish_registration import finish_registration
 from src.application.states import RegistrationStates
 from src.application.keyboards.region_keyborad import get_region_keyboard
 from src.services.interfaces import IUserService
@@ -59,7 +60,10 @@ async def retry_region_callback(event: GroupTypes.MessageEvent, state_dispenser:
 async def select_region_callback(
         event: GroupTypes.MessageEvent,
         user_service: IUserService,
-        state_dispenser: BuiltinStateDispenser
+        state_dispenser: BuiltinStateDispenser,
+        photo_uploader: PhotoMessageUploader,
+        log_chat: str,
+        tg_bot: TgBot
 ):
     payload = event.object.payload
     state_peer = await state_dispenser.get(event.object.peer_id)
@@ -67,21 +71,24 @@ async def select_region_callback(
         return
 
     region_full = await user_service.get_region_by_prefix(payload["region"])
-    current_payload = state_peer.payload or {}
-
-    await state_dispenser.set(
-        event.object.peer_id,
-        RegistrationStates.CITY,
-        **current_payload,
-        region=region_full
-    )
+    state = await state_dispenser.get(event.object.peer_id)
+    new_payload = {**state.payload, 'region':  region_full}
 
     await event.ctx_api.messages.send(
         peer_id=event.object.peer_id,
-        message=f"Вы выбрали: {region_full}\nТеперь укажите ваш город или населённый пункт:",
+        message=f"Вы выбрали: {region_full}\n",
         random_id=0
     )
-
     await event.ctx_api.messages.send_message_event_answer(
         event_id=event.object.event_id, user_id=event.object.user_id, peer_id=event.object.peer_id
+    )
+    await finish_registration(
+        user_service=user_service,
+        peer_id=event.object.peer_id,
+        state_payload=new_payload,
+        ctx_api=event.ctx_api,
+        log_chat=log_chat,
+        state_dispenser=state_dispenser,
+        tg_bot=tg_bot,
+        photo_uploader=photo_uploader
     )

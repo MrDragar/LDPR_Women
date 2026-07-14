@@ -8,11 +8,10 @@ class IUserService(ABC):
     @abstractmethod
     async def create_user(
             self, user_id: int, username: str | None,
-            surname: str, name: str, is_member: bool,
+            surname: str, name: str,
             patronymic: str | None, birth_date: date,
             phone_number: str, region: str, email: str,
-            gender: str, city: str, wish_to_join: bool, home_address: str | None,
-            news_subscription: bool
+            gender: str
     ) -> User:
         ...
 

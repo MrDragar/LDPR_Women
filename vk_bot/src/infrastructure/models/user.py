@@ -12,7 +12,6 @@ class UserORM(Base):
 
     id: Mapped[int] = mapped_column("id", primary_key=True)
     source: Mapped[Sources] = mapped_column(SQLEnum(Sources), name="source", primary_key=True)
-    is_member: Mapped[bool] = mapped_column("is_member", nullable=False)
     username: Mapped[str] = mapped_column("username", nullable=True)
     surname: Mapped[str] = mapped_column("surname", nullable=False)
     name: Mapped[str] = mapped_column("name", nullable=False)
@@ -22,10 +21,6 @@ class UserORM(Base):
     region: Mapped[str] = mapped_column("region", nullable=False)
     email: Mapped[str] = mapped_column("email", nullable=False)
     gender: Mapped[str] = mapped_column("gender", nullable=False)
-    city: Mapped[str] = mapped_column("city", nullable=False)
-    wish_to_join: Mapped[bool] = mapped_column("wish_to_join", nullable=False)
-    home_address: Mapped[str] = mapped_column("home_address", nullable=True)
-    news_subscription: Mapped[bool] = mapped_column("news_subscription", nullable=False)
     created_at: Mapped[datetime] = mapped_column(
         "created_at",
         DateTime,
@@ -37,7 +32,6 @@ class UserORM(Base):
         return User(
             id=self.id,
             source=self.source,
-            is_member=self.is_member,
             username=self.username,
             surname=self.surname,
             name=self.name,
@@ -47,10 +41,6 @@ class UserORM(Base):
             region=self.region,
             email=self.email,
             gender=self.gender,
-            city=self.city,
-            wish_to_join=self.wish_to_join,
-            home_address=self.home_address,
-            news_subscription=self.news_subscription,
             created_at=self.created_at
         )
 
@@ -59,7 +49,6 @@ class UserORM(Base):
         return cls(
             id=user.id,
             source=user.source,
-            is_member=user.is_member,
             username=user.username,
             surname=user.surname,
             name=user.name,
@@ -69,9 +58,5 @@ class UserORM(Base):
             region=user.region,
             email=user.email,
             gender=user.gender,
-            city=user.city,
-            wish_to_join=user.wish_to_join,
-            home_address=user.home_address,
-            news_subscription=user.news_subscription,
             created_at=user.created_at
         )

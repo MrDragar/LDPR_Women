@@ -1,3 +1,4 @@
+import asyncio
 import logging
 from vkbottle.bot import BotLabeler, Message
 from vkbottle import PhotoMessageUploader
@@ -24,17 +25,24 @@ async def start(
 
     if await user_service.is_user_exists(message.from_id):
         await message.answer(
-            "Здравствуйте. Я, соколёнок Русик, интернет-помощник ЛДПР. "
-            "Добро пожаловать в ЛДПР! Вы уже зарегистрированы."
-        )
-        await message.answer(
-            "Используйте кнопку ниже, чтобы открыть наш сайт",
-            keyboard=get_miniapp_keyboard()
+            "Вы уже зарегистрированы"
         )
         return
-    photo = await photo_uploader.upload('docs/sokol_stay.webp', peer_id=message.peer_id)
-    await message.answer(attachment=photo)
-    await message.answer("Здравствуйте. Я, соколёнок Русик, интернет-помощник ЛДПР. Добро пожаловать в ЛДПР!")
+    await message.answer(
+        """Сегодня мы предлагаем не просто поддержать инициативу.
+
+Мы приглашаем Вас стать ее лицом.
+
+Если вы считаете, что российские женщины заслуживают уважения, достойной работы, защищенного материнства и уверенности в завтрашнем дне — присоединяйтесь к инициативе ЛДПР.
+
+Станьте волонтером поддержки семьи, расскажите о ней в своих коллективах, приводите 
+единомышленников и делитесь своими историями.
+
+Вместе мы можем сделать так, чтобы голос женщин был услышан."""
+    )
+    await asyncio.sleep(0.5)
+    await message.answer("После регистрации вы получите статус волонтера и методические "
+                         "рекомендации по продвижению нашей инициативы.")
     await message.answer("Если вы допустили ошибку при заполнении анкеты, напишите мне 'Заново' или 'Начать'")
     await message.answer(
         "Для начала дайте согласие на обработку персональных данных",
