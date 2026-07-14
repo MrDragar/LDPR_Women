@@ -75,10 +75,11 @@ async def finish_registration(
             
             f"Номер участника: Б{user.id}"
         )
+        await ctx_api.messages.send(
+            peer_id=log_chat,
+            message=log_text,
+            random_id=0
 
-        await tg_bot.send_message(
-            chat_id=log_chat,
-            text=log_text,
         )
 
     except Exception as e:
